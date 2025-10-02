@@ -1,4 +1,3 @@
-// src/components/HomePage.jsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import SearchJob from "./SearchJob";

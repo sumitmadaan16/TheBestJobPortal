@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
@@ -7,7 +6,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import HomePage from "./components/HomePage";
 import JobDetail from "./components/JobDetail";
-import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 
 function App() {
