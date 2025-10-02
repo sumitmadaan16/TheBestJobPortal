@@ -14,10 +14,19 @@ public class Job {
     private String jobTitle;
     private String jobDescription;
     private int experience;
+    private String postedBy; // Username of the user who posted this job
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name ="job_id")
     private List<TechStack> techStack = new ArrayList<>();
+
+    public String getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(String postedBy) {
+        this.postedBy = postedBy;
+    }
 
     public List<TechStack> getTechStack() {
         return techStack;
@@ -66,32 +75,8 @@ public class Job {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", jobDescription='" + jobDescription + '\'' +
                 ", experience=" + experience +
+                ", postedBy='" + postedBy + '\'' +
                 ", techStack=" + techStack +
                 '}';
     }
 }
-
-// Dummy Data
-//{
-//        "jobId": 1,
-//        "jobTitle": "Software Engineer",
-//        "jobDescription": "Responsible for developing and maintaining software applications.",
-//        "experience": 3,
-//        "techStack": [
-//        {
-//        "techId": 1,
-//        "name": "Java",
-//        "jobId": 1
-//        },
-//        {
-//        "techId": 2,
-//        "name": "Spring Boot",
-//        "jobId": 1
-//        },
-//        {
-//        "techId": 3,
-//        "name": "React",
-//        "jobId": 1
-//        }
-//        ]
-//        }

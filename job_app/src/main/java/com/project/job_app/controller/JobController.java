@@ -3,7 +3,10 @@ package com.project.job_app.controller;
 import com.project.job_app.model.Job;
 import com.project.job_app.repository.JobRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +19,13 @@ public class JobController {
     @Autowired
     private JobRepo jobRepo;
 
+    // Public: Get all jobs (anyone can view)
     @GetMapping
     public List<Job> getAllJob(){
         return jobRepo.findAll();
     }
 
-    @PostMapping
-    public Job createJOb(@RequestBody Job job){
-        return jobRepo.save(job);
-    }
-
+    // Public: Get single job details (anyone can view full details)
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJob(@PathVariable long id) {
         Optional<Job> job = jobRepo.findById(id);
@@ -33,6 +33,7 @@ public class JobController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Public: Search jobs by tech stack (anyone can search)
     @GetMapping("/search")
     public ResponseEntity<List<Job>> findByTechStack(@RequestParam String tech) {
         List<Job> job = jobRepo.findByTechStack(tech);
@@ -43,15 +44,71 @@ public class JobController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteJob(@PathVariable long id) {
-        if (jobRepo.existsById(id)) {
-            jobRepo.deleteById(id);  // Cascade will handle TechStack deletion
-            return ResponseEntity.ok("Job with ID " + id + " deleted successfully");
+    // Protected: Create job (authenticated users only)
+    @PostMapping
+    public ResponseEntity<?> createJob(@RequestBody Job job){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            job.setPostedBy(username);
+            Job savedJob = jobRepo.save(job);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedJob);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating job");
         }
-        return ResponseEntity.notFound().build();
     }
 
+    // Protected: Update job (only the user who posted can update)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateJob(@PathVariable long id, @RequestBody Job jobDetails) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
+        Optional<Job> jobOptional = jobRepo.findById(id);
 
+        if (jobOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Job existingJob = jobOptional.get();
+
+        // Check if the user is the one who posted this job
+        if (!existingJob.getPostedBy().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You can only edit jobs that you posted");
+        }
+
+        // Update job details
+        existingJob.setJobTitle(jobDetails.getJobTitle());
+        existingJob.setJobDescription(jobDetails.getJobDescription());
+        existingJob.setExperience(jobDetails.getExperience());
+        existingJob.setTechStack(jobDetails.getTechStack());
+
+        Job updatedJob = jobRepo.save(existingJob);
+        return ResponseEntity.ok(updatedJob);
+    }
+
+    // Protected: Delete job (only the user who posted can delete)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteJob(@PathVariable long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Optional<Job> jobOptional = jobRepo.findById(id);
+
+        if (jobOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Job existingJob = jobOptional.get();
+
+        // Check if the user is the one who posted this job
+        if (!existingJob.getPostedBy().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("You can only delete jobs that you posted");
+        }
+
+        jobRepo.deleteById(id);
+        return ResponseEntity.ok("Job with ID " + id + " deleted successfully");
+    }
 }

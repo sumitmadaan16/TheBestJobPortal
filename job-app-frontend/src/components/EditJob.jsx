@@ -1,14 +1,14 @@
-// src/components/AddJob.jsx
+// src/components/EditJob.jsx
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const AddJob = ({ onJobAdded, onClose }) => {
+const EditJob = ({ job, onJobUpdated, onClose }) => {
     const { token } = useAuth();
     const [jobData, setJobData] = useState({
-        jobTitle: "",
-        jobDescription: "",
-        experience: "",
-        techStack: []
+        jobTitle: job.jobTitle || "",
+        jobDescription: job.jobDescription || "",
+        experience: job.experience || "",
+        techStack: job.techStack || []
     });
     const [techInput, setTechInput] = useState("");
     const [error, setError] = useState("");
@@ -51,8 +51,8 @@ const AddJob = ({ onJobAdded, onClose }) => {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/jobs", {
-                method: "POST",
+            const response = await fetch(`http://localhost:8080/jobs/${job.jobId}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
@@ -64,17 +64,17 @@ const AddJob = ({ onJobAdded, onClose }) => {
             });
 
             if (response.ok) {
-                const newJob = await response.json();
-                onJobAdded(newJob);
-                alert("Job added successfully!");
+                const updatedJob = await response.json();
+                onJobUpdated(updatedJob);
+                alert("Job updated successfully!");
                 onClose();
             } else {
                 const errorText = await response.text();
-                setError(errorText || "Failed to add job");
+                setError(errorText || "Failed to update job");
             }
         } catch (error) {
-            console.error("Error adding job:", error);
-            setError("Error adding job: " + error.message);
+            console.error("Error updating job:", error);
+            setError("Error updating job: " + error.message);
         }
     };
 
@@ -82,7 +82,7 @@ const AddJob = ({ onJobAdded, onClose }) => {
         <div className="modal-overlay">
             <div className="modal">
                 <div className="modal-header">
-                    <h2>Add New Job</h2>
+                    <h2>Edit Job</h2>
                     <button className="close-btn" onClick={onClose}>
                         ✕
                     </button>
@@ -159,7 +159,7 @@ const AddJob = ({ onJobAdded, onClose }) => {
                             Cancel
                         </button>
                         <button type="button" onClick={handleSubmit} className="submit-btn">
-                            Add Job
+                            Update Job
                         </button>
                     </div>
                 </div>
@@ -168,4 +168,4 @@ const AddJob = ({ onJobAdded, onClose }) => {
     );
 };
 
-export default AddJob;
+export default EditJob;
