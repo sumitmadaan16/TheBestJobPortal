@@ -548,7 +548,6 @@ button:focus {
   font-style: italic;
 }
 
-/* ====== Tech Stack Tags ====== */
 .tech-stack {
   margin-top: auto;
 }
@@ -596,8 +595,9 @@ button:focus {
   transform: scale(1.1);
 }
 
-/* ====== Modal ====== */
+
 .modal-overlay {
+  margin-top: 12rem;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
