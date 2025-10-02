@@ -1,0 +1,125 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Gradle ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### Application Properties ###
+application.properties
+application.yml
+application-*.properties
+application-*.yml
+!application-sample.properties
+!application-sample.yml
+
+### Logs ###
+*.log
+logs/
+spring.log
+
+### Database ###
+*.db
+*.sqlite
+*.h2.db
+
+### Compiled class file ###
+*.class
+
+### Package Files ###
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+### Java ###
+hs_err_pid*
+replay_pid*
+
+### Temporary Files ###
+*.tmp
+*.bak
+*.swp
+*~.nib
+temp/
+tmp/
+
+### Security ###
+*.key
+*.pem
+*.p12
+*.jks
+.env
+.env.local
+secrets/
+
+### Test Coverage ###
+.jacoco/
+*.exec
+
+### Other ###
+*.orig
+.metadata
+.recommenders
+RemoteSystemsTempFiles
