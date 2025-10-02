@@ -19,13 +19,11 @@ public class JobController {
     @Autowired
     private JobRepo jobRepo;
 
-    // Public: Get all jobs (anyone can view)
     @GetMapping
     public List<Job> getAllJob(){
         return jobRepo.findAll();
     }
 
-    // Public: Get single job details (anyone can view full details)
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJob(@PathVariable long id) {
         Optional<Job> job = jobRepo.findById(id);
@@ -33,7 +31,6 @@ public class JobController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Public: Search jobs by tech stack (anyone can search)
     @GetMapping("/search")
     public ResponseEntity<List<Job>> findByTechStack(@RequestParam String tech) {
         List<Job> job = jobRepo.findByTechStack(tech);
@@ -44,7 +41,6 @@ public class JobController {
         }
     }
 
-    // Protected: Create job (authenticated users only)
     @PostMapping
     public ResponseEntity<?> createJob(@RequestBody Job job){
         try {
@@ -58,7 +54,6 @@ public class JobController {
         }
     }
 
-    // Protected: Update job (only the user who posted can update)
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@PathVariable long id, @RequestBody Job jobDetails) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,13 +67,11 @@ public class JobController {
 
         Job existingJob = jobOptional.get();
 
-        // Check if the user is the one who posted this job
         if (!existingJob.getPostedBy().equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("You can only edit jobs that you posted");
         }
 
-        // Update job details
         existingJob.setJobTitle(jobDetails.getJobTitle());
         existingJob.setJobDescription(jobDetails.getJobDescription());
         existingJob.setExperience(jobDetails.getExperience());
@@ -88,7 +81,6 @@ public class JobController {
         return ResponseEntity.ok(updatedJob);
     }
 
-    // Protected: Delete job (only the user who posted can delete)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

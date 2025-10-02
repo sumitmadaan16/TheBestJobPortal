@@ -1,8 +1,6 @@
 package com.project.job_app.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class Job {
     private String jobTitle;
     private String jobDescription;
     private int experience;
-    private String postedBy; // Username of the user who posted this job
+    private String postedBy;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name ="job_id")
