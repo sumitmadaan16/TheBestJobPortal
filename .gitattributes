@@ -1,1 +1,7 @@
 job-app-frontend/* linguist-detectable=false
+job-app-frontend/**/*.js linguist-detectable=false
+job-app-frontend/**/*.jsx linguist-detectable=false
+job-app-frontend/**/*.ts linguist-detectable=false
+job-app-frontend/**/*.tsx linguist-detectable=false
+job-app-frontend/**/*.css linguist-detectable=false
+job-app-frontend/**/*.html linguist-detectable=false
